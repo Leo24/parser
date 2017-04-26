@@ -1,0 +1,24 @@
+{
+    "name": "leonid/parser",
+    "license": "free",
+    "authors": [
+        {
+            "name": "LeonidR",
+            "email": "leo2410ua@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    },
+    "config": {
+        "vendor-dir": "plugins"
+    },
+    "autoload": {
+    },
+    "repositories":[
+        {
+            "type":"git",
+            "url":"https://github.com/Leo24/parser"
+        }
+    ]
+}
