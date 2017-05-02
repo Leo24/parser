@@ -20,6 +20,24 @@ class PageParser
         $this->directory = dirname(dirname(__FILE__));
     }
 
+    public function help() {
+        echo "
+        php index.php parse [url] - for parsing and store images links from page \n
+        php index.php report [url] - view list of images links from page, if list exists \n
+        ";
+    }
+
+    /**
+     * @param $url
+     * @return string
+     */
+    private function addHttp($url) {
+        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+            $url = "http://" . $url;
+        }
+        return $url;
+    }
+
     /**
      * Get images from url and put them to directory
      */
@@ -65,22 +83,6 @@ class PageParser
             }
             fclose($handle);
         }
-
-    }
-
-    public function help() {
-
-    }
-
-    /**
-     * @param $url
-     * @return string
-     */
-    private function addHttp($url) {
-        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
-            $url = "http://" . $url;
-        }
-        return $url;
     }
 
     /**
@@ -98,18 +100,18 @@ class PageParser
 
     private function getImages($links){
         $file = $this->directory . self::FILE_DIRECTORY . basename($this->domain) . self::FILE_EXTENSION;
+        $images = [];
         foreach($links as $link){
-            $images = [];
             $html = file_get_contents($link);
             $dom = new \DOMDocument();
             $dom->loadHTML($html);
             foreach ($dom->getElementsByTagName('img') as $image) {
-                $images[] = $image->getAttribute('src');
+                $images[] = $link.':'.$image->getAttribute('src');
             }
-            $fp = fopen($file, 'w') or die ("Unable to open file!");
-            fputcsv($fp, $images);
-            fclose($fp);
         }
+        $fp = fopen($file, 'w') or die ("Unable to open file!");
+        fputcsv($fp, $images);
+        fclose($fp);
         if (file_exists($file)){
             return $file;
         }
