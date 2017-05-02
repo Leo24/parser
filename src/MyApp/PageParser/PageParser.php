@@ -82,6 +82,8 @@ class PageParser
                 }
             }
             fclose($handle);
+        } else {
+            echo "File $file does not exist. Try \"php index.php parse $url \"";
         }
     }
 
@@ -109,7 +111,7 @@ class PageParser
                 $images[] = $link.':'.$image->getAttribute('src');
             }
         }
-        $fp = fopen($file, 'w') or die ("Unable to open file!");
+        $fp = fopen($file, 'w') or die ("Unable to open file $file, check access permissions");
         fputcsv($fp, $images);
         fclose($fp);
         if (file_exists($file)){
